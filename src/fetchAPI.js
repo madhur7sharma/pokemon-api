@@ -8,12 +8,13 @@ function ProductData() {
     const [product , setProduct] = useState(null)
     const [notFound, setNotFound] = useState("")
     const [tryElse, setTryElse] = useState("")
-
+    const [inputText, setInputText] = useState("")
     const [loading, setLoading] = useState(false)
     
     const fetchUrl = async () => {
         if(input !== "")  
         {
+            setInputText(input)
             setProduct(null)
             setInput("")
             setLoading(true)
@@ -26,6 +27,10 @@ function ProductData() {
                     setTryElse("Try something like Pikachu or Squirtle")
                 })
             setLoading(false)
+        }
+        else
+        {
+            setNotFound("Please Enter Pokemon Name")
         }
     }
 
@@ -80,7 +85,8 @@ function ProductData() {
                 </div>
                 :
                 <div className="flex flex-col items-center mt-10">
-                    <p className="text-red-500 uppercase">{notFound}</p>&nbsp;
+                    <p className="text-red-400 uppercase font-bold"><i className="fas fa-exclamation-circle text-red-600"/>&nbsp;{inputText}</p>
+                    <p className="text-red-600 uppercase font-bold">{notFound}</p>&nbsp;
                     <p className="text-gray-100 uppercase -mt-5">{tryElse}</p>             
                 </div> 
             }
