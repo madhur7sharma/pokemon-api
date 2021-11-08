@@ -12,6 +12,7 @@ function ProductData() {
     const [loading, setLoading] = useState(false)
     
     const fetchUrl = async () => {
+        document.querySelector("input").focus()
         if(input !== "")  
         {
             setInputText(input)
@@ -30,15 +31,47 @@ function ProductData() {
         }
         else
         {
+            setInputText("")
             setNotFound("Please Enter Pokemon Name")
+            setTryElse("Try something like Pikachu or Squirtle")
+        }
+    }
+
+
+    const EnterKeyHandler = async (e) => {
+        if(e.key === 'Enter')
+        {
+            if(input !== "")  
+            {
+            setInputText(input)
+            setProduct(null)
+            setInput("")
+            setLoading(true)
+            await axios.get(url)
+                .then(response => {
+                    setProduct(response.data)
+                })
+                .catch(()=>{
+                    setNotFound("No Such Pokemon Found")
+                    setTryElse("Try something like Pikachu or Squirtle")
+                })
+            setLoading(false)
+            }
+            else
+            {
+                
+                setInputText("")
+                setNotFound("Please Enter Pokemon Name")
+                setTryElse("Try something like Pikachu or Squirtle")
+            }
         }
     }
 
     return(
         <>
             <div className="flex justify-center mt-10">
-                <input autoFocus className="outline-none rounded-l shadow py-2 px-3 bg-blue-100 w-56" value={input} onChange={(e)=>setInput(e.target.value.toLowerCase())} placeholder="Search by Pokemon Name"></input>  
-                <button className="bg-blue-500 text-white font-bold py-2 px-6 rounded-r shadow border-blue-500 hover:bg-transparent hover:text-blue-500 transition-all duration-300" onClick={fetchUrl}><i className="fas fa-search"/></button>
+                <input autoFocus className="outline-none rounded-l shadow py-2 px-3 bg-blue-100 w-56" value={input} onChange={(e)=>setInput(e.target.value.toLowerCase())} onKeyPress={EnterKeyHandler} placeholder="Search by Pokemon Name"></input>  
+                <button className="bg-blue-500 text-white font-bold py-2 px-6 rounded-r shadow border-blue-500 hover:bg-transparent transition-all duration-300" onClick={fetchUrl}><i className="fas fa-search"/></button>
             </div>
             {
                 loading ?
@@ -85,7 +118,7 @@ function ProductData() {
                 </div>
                 :
                 <div className="flex flex-col items-center mt-10">
-                    <p className="text-red-400 uppercase font-bold"><i className="fas fa-exclamation-circle text-red-600"/>&nbsp;{inputText}</p>
+                    <p className="text-red-400 uppercase font-bold">{inputText !== "" ? <i className="fas fa-exclamation-circle text-red-600"/> : notFound === "Please Enter Pokemon Name" ? <i className="fas fa-exclamation-triangle text-yellow-400"></i> : null }&nbsp;{inputText}</p>
                     <p className="text-red-600 uppercase font-bold">{notFound}</p>&nbsp;
                     <p className="text-gray-100 uppercase -mt-5">{tryElse}</p>             
                 </div> 
