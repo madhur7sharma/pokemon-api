@@ -28,6 +28,10 @@ function ProductData() {
                     setTryElse("Try something like Pikachu or Squirtle")
                 })
             setLoading(false)
+            if(window.innerWidth < 700)
+            {
+                document.querySelector("input").blur()
+            }
         }
         else
         {
@@ -43,19 +47,23 @@ function ProductData() {
         {
             if(input !== "")  
             {
-            setInputText(input)
-            setProduct(null)
-            setInput("")
-            setLoading(true)
-            await axios.get(url)
-                .then(response => {
-                    setProduct(response.data)
-                })
-                .catch(()=>{
-                    setNotFound("No Such Pokemon Found")
-                    setTryElse("Try something like Pikachu or Squirtle")
-                })
-            setLoading(false)
+                setInputText(input)
+                setProduct(null)
+                setInput("")
+                setLoading(true)
+                await axios.get(url)
+                    .then(response => {
+                        setProduct(response.data)
+                    })
+                    .catch(()=>{
+                        setNotFound("No Such Pokemon Found")
+                        setTryElse("Try something like Pikachu or Squirtle")
+                    })
+                setLoading(false)
+                if(window.innerWidth < 700)
+                {
+                    document.querySelector("input").blur()
+                }
             }
             else
             {
